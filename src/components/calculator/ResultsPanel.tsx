@@ -5,6 +5,7 @@ import { TaxBreakdownPie } from '@/components/charts/TaxBreakdownPie'
 import { SalaryFlowChart } from '@/components/charts/SalaryFlowChart'
 import { TotalCompensationView } from './TotalCompensationView'
 import { PensionProjector } from './PensionProjector'
+import { FinalSummaryCard } from './FinalSummaryCard'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import type { CalculatorResult } from '@/lib/types'
@@ -152,6 +153,9 @@ export function ResultsPanel({
             <div className="text-xs text-white/40 text-center mb-2">פילוח ברוטו</div>
             <TaxBreakdownPie result={result} />
           </Card>
+
+          {/* Final Summary */}
+          <FinalSummaryCard result={result} />
 
           {/* Smart Insights */}
           <SmartInsights result={result} />

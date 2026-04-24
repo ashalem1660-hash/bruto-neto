@@ -32,6 +32,10 @@ const DEFAULT_INPUT: CalculatorInput = {
   paysMaintenance: false,
   spouseNotWorking: false,
   isVeteran: false,
+  hasBachelors: false,
+  bachelorGraduationYear: 2024,
+  hasMasters: false,
+  masterGraduationYear: 2022,
   // עצמאי
   annualRevenue: 300000,
   annualExpenses: 60000,

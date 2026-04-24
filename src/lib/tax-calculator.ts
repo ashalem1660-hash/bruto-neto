@@ -92,6 +92,22 @@ export function calculateCreditPoints(input: CalculatorInput): {
     base += 1
   }
 
+  if (input.hasBachelors && input.bachelorGraduationYear >= 2023) {
+    const yearsSince = currentYear - input.bachelorGraduationYear
+    if (yearsSince >= 1 && yearsSince <= 3) {
+      breakdown.push({ label: `תואר ראשון (שנה ${yearsSince} מתוך 3)`, points: 1 })
+      base += 1
+    }
+  }
+
+  if (input.hasMasters && input.masterGraduationYear >= 2005) {
+    const yearsSince = currentYear - input.masterGraduationYear
+    if (yearsSince >= 1) {
+      breakdown.push({ label: 'תואר שני', points: 0.5 })
+      base += 0.5
+    }
+  }
+
   return { points: base, breakdown }
 }
 
@@ -131,13 +147,13 @@ export function calculateIncomeTax(
     const from = bracket.from
     const to = bracket.to ?? Infinity
     if (annualIncome <= from) {
-      bracketBreakdown.push({ bracket: `${bracket.rate * 100}%`, income: 0, tax: 0, rate: bracket.rate, isActive: false, from, to: bracket.to })
+      bracketBreakdown.push({ bracket: `${Math.round(bracket.rate * 100)}%`, income: 0, tax: 0, rate: bracket.rate, isActive: false, from, to: bracket.to })
       continue
     }
     const taxableInThisBracket = Math.min(annualIncome, to) - from
     const taxForBracket = taxableInThisBracket * bracket.rate
     grossTax += taxForBracket
-    bracketBreakdown.push({ bracket: `${bracket.rate * 100}%`, income: taxableInThisBracket, tax: taxForBracket, rate: bracket.rate, isActive: true, from, to: bracket.to })
+    bracketBreakdown.push({ bracket: `${Math.round(bracket.rate * 100)}%`, income: taxableInThisBracket, tax: taxForBracket, rate: bracket.rate, isActive: true, from, to: bracket.to })
   }
 
   const creditAmount = creditPoints * creditPointValueMonthly * 12

@@ -16,7 +16,6 @@ import { AdditionalOptions } from '@/components/calculator/AdditionalOptions'
 import { ResultsPanel } from '@/components/calculator/ResultsPanel'
 import { Card } from '@/components/ui/Card'
 import { Tooltip } from '@/components/ui/Tooltip'
-import { Toggle } from '@/components/ui/Toggle'
 import { Settings, Calculator, ChevronDown, ChevronUp } from 'lucide-react'
 
 export default function HomePage() {
@@ -54,11 +53,11 @@ export default function HomePage() {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg"
               style={{ background: 'linear-gradient(135deg, #F5C518, #e6a800)' }}>
-              <span style={{ color: '#0A0A14' }}>ב→נ</span>
+              <span style={{ color: '#0A0A14' }}>ב←נ</span>
             </div>
             <div>
               <h1 className="font-black text-xl text-white leading-none">ברוטו לנטו</h1>
-              <p className="text-xs text-white/40">מחשבון מיסוי ישראלי 2025</p>
+              <p className="text-xs text-white/40">גלה לאן הכסף שלך הולך</p>
             </div>
           </div>
           <a href="/admin"
@@ -75,11 +74,14 @@ export default function HomePage() {
           {/* Left — form */}
           <div className="lg:col-span-3 space-y-5">
             <div className="text-center lg:text-right">
+              <p className="text-amber-400/70 text-sm font-semibold mb-1 tracking-wide">
+                כאן בודקים כמה נטו נשאר מהברוטו
+              </p>
               <h2 className="text-3xl font-black text-white leading-tight">
                 כמה נשאר לך אחרי מסים?
               </h2>
-              <p className="text-white/50 mt-2 text-sm">
-                מחשב בזמן אמת — מסים, ביטוח לאומי, פנסיה וקרן השתלמות
+              <p className="text-white/40 mt-2 text-sm">
+                מחשבון מיסוי חכם שאומר לך לאן הכסף הולך — ובכמה
               </p>
             </div>
 

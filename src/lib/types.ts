@@ -112,6 +112,10 @@ export interface CalculatorInput {
   paysMaintenance: boolean
   spouseNotWorking: boolean
   isVeteran: boolean
+  hasBachelors: boolean
+  bachelorGraduationYear: number
+  hasMasters: boolean
+  masterGraduationYear: number
 
   // עצמאי
   annualRevenue: number
