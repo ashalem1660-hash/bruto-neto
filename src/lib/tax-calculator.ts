@@ -87,6 +87,11 @@ export function calculateCreditPoints(input: CalculatorInput): {
     base += 3
   }
 
+  if (input.isVeteran) {
+    breakdown.push({ label: 'חייל/ת משוחרר/ת (שירות חובה)', points: 1 })
+    base += 1
+  }
+
   return { points: base, breakdown }
 }
 
@@ -125,16 +130,14 @@ export function calculateIncomeTax(
   for (const bracket of brackets) {
     const from = bracket.from
     const to = bracket.to ?? Infinity
-    if (annualIncome <= from) break
+    if (annualIncome <= from) {
+      bracketBreakdown.push({ bracket: `${bracket.rate * 100}%`, income: 0, tax: 0, rate: bracket.rate, isActive: false, from, to: bracket.to })
+      continue
+    }
     const taxableInThisBracket = Math.min(annualIncome, to) - from
     const taxForBracket = taxableInThisBracket * bracket.rate
     grossTax += taxForBracket
-    bracketBreakdown.push({
-      bracket: `${bracket.rate * 100}%`,
-      income: taxableInThisBracket,
-      tax: taxForBracket,
-      rate: bracket.rate
-    })
+    bracketBreakdown.push({ bracket: `${bracket.rate * 100}%`, income: taxableInThisBracket, tax: taxForBracket, rate: bracket.rate, isActive: true, from, to: bracket.to })
   }
 
   const creditAmount = creditPoints * creditPointValueMonthly * 12

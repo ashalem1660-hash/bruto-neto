@@ -55,6 +55,17 @@ export function AdditionalOptions({ input, onChange }: Props) {
           onChange={v => onChange({ spouseNotWorking: v })}
         />
       </div>
+
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-white/60">חייל/ת משוחרר/ת</span>
+          <Tooltip content="מי שסיים שירות חובה מלא בצבא זכאי לנקודת זיכוי אחת נוספת (בשנת השחרור ואחריה)." />
+        </div>
+        <Toggle
+          checked={input.isVeteran}
+          onChange={v => onChange({ isVeteran: v })}
+        />
+      </div>
     </div>
   )
 }

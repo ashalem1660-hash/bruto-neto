@@ -13,7 +13,7 @@ export default function AdminPage() {
   const [settlements, setSettlements] = useState<Settlement[]>(DEFAULT_SETTLEMENTS)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
-  const [activeTab, setActiveTab] = useState<'brackets' | 'bituach' | 'settlements' | 'general'>('brackets')
+  const [activeTab, setActiveTab] = useState<'brackets' | 'bituach' | 'settlements' | 'general' | 'credits'>('brackets')
   const [newSettlement, setNewSettlement] = useState({ name: '', category: 'A' as 'A' | 'B' })
 
   useEffect(() => {
@@ -79,7 +79,8 @@ export default function AdminPage() {
     { id: 'brackets', label: 'מדרגות מס' },
     { id: 'bituach', label: 'ביטוח לאומי' },
     { id: 'settlements', label: 'יישובים מזכים' },
-    { id: 'general', label: 'כללי' }
+    { id: 'general', label: 'כללי' },
+    { id: 'credits', label: 'נקודות זיכוי' }
   ] as const
 
   return (
@@ -344,10 +345,78 @@ export default function AdminPage() {
             </div>
           </div>
         )}
+        {/* Credit Points Reference */}
+        {activeTab === 'credits' && (
+          <div className="space-y-4">
+            <div>
+              <h2 className="text-white font-bold text-lg">מדריך נקודות זיכוי 2025</h2>
+              <p className="text-white/40 text-sm mt-1">
+                נקודת זיכוי אחת = ₪242/חודש = ₪2,904/שנה. הנתונים לעיון בלבד — לא ניתן לעריכה כאן.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 overflow-hidden">
+              <table className="w-full text-sm">
+                <thead className="bg-white/5">
+                  <tr className="text-white/40 text-xs">
+                    <th className="px-4 py-3 text-right">סוג זיכוי</th>
+                    <th className="px-4 py-3 text-right">נקודות</th>
+                    <th className="px-4 py-3 text-right">שווי/חודש</th>
+                    <th className="px-4 py-3 text-right">תנאי זכאות</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {CREDIT_POINTS_REFERENCE.map((row, i) => (
+                    <tr key={i} className="border-t border-white/5 hover:bg-white/3">
+                      <td className="px-4 py-3 text-white font-medium">{row.label}</td>
+                      <td className="px-4 py-3 text-amber-400 font-bold">{row.points}</td>
+                      <td className="px-4 py-3 text-green-400">₪{Math.round(row.points * 242)}</td>
+                      <td className="px-4 py-3 text-white/50 text-xs">{row.condition}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5">
+              <h3 className="text-amber-400 font-bold mb-3 text-sm">על יישובים מזכים</h3>
+              <div className="space-y-2 text-xs text-white/60">
+                <p>בישראל, כל היישובים המוכרים בקטגוריה זהה מקבלים <strong className="text-white/80">אותה תקרת הכנסה</strong> (₪199,000 שנתי ב-2025) ואותו שיעור הנחה:</p>
+                <p>• <strong className="text-amber-400">קטגוריה A</strong> (פריפריה קיצונית — אילת, ירוחם, דימונה וכד׳): <strong>20% הנחה</strong> על מס ההכנסה עד התקרה</p>
+                <p>• <strong className="text-blue-400">קטגוריה B</strong> (פריפריה — נהריה, בית שאן, צפת וכד׳): <strong>10% הנחה</strong> על מס ההכנסה עד התקרה</p>
+                <p className="text-white/40">ההנחה חלה על סכום המס (לא ההכנסה). למשל: בהכנסה של ₪10,000/חודש, הנחה של 20% על המס שחושב עד ₪199,000 שנתי.</p>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   )
 }
+
+const CREDIT_POINTS_REFERENCE = [
+  { label: 'תושב ישראל (בסיס)', points: 2.25, condition: 'כל תושב ישראל' },
+  { label: 'אישה', points: 0.5, condition: 'נשים בלבד' },
+  { label: 'ילד — שנת לידה (אם)', points: 1.5, condition: 'אמא בשנת לידת הילד' },
+  { label: 'ילד — שנת לידה (אב)', points: 1.0, condition: 'אב בשנת לידת הילד' },
+  { label: 'ילד גיל 1–2 (אם)', points: 4.5, condition: 'אמא לילד בגיל 1–2' },
+  { label: 'ילד גיל 1–2 (אב)', points: 2.0, condition: 'אב לילד בגיל 1–2' },
+  { label: 'ילד גיל 3 (אם)', points: 3.5, condition: 'אמא לילד בגיל 3' },
+  { label: 'ילד גיל 3 (אב)', points: 1.0, condition: 'אב לילד בגיל 3' },
+  { label: 'ילד גיל 4–5 (אם)', points: 2.5, condition: 'אמא לילד בגיל 4–5' },
+  { label: 'ילד גיל 4–5 (אב)', points: 1.0, condition: 'אב לילד בגיל 4–5' },
+  { label: 'ילד גיל 6–17', points: 1.0, condition: 'כל הורה, לכל ילד בגיל 6–17' },
+  { label: 'ילד עם נכות', points: 2.0, condition: 'בנוסף לנקודות הגיל הרגילות' },
+  { label: 'הורה יחיד', points: 1.0, condition: 'הורה יחיד שיש לו ילדים קטינים' },
+  { label: 'תשלום מזונות (פסק דין)', points: 1.0, condition: 'מי שמשלם מזונות לפי פסק דין' },
+  { label: 'בן/ת זוג לא עובד/ת', points: 1.0, condition: 'אם בן/ת הזוג בעל נכות ≥90%, עיוור/ת, או מעל גיל פרישה' },
+  { label: 'נכות 100% / עיוורון', points: 2.0, condition: 'נכות מוכרת 100% או עיוורון' },
+  { label: 'נכות 90%+', points: 2.0, condition: 'נכות מוכרת 90% ומעלה' },
+  { label: 'נכות 50%–89%', points: 1.0, condition: 'נכות מוכרת 50% עד 89%' },
+  { label: 'עולה חדש', points: 3.0, condition: '36 חודשים ראשונים לעלייה (שנות המעבר: 2 נק׳)' },
+  { label: 'חייל/ת משוחרר/ת', points: 1.0, condition: 'מי ששירת שירות חובה מלא בצבא' },
+]
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (

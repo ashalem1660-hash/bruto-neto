@@ -31,6 +31,7 @@ const DEFAULT_INPUT: CalculatorInput = {
   isSingleParent: false,
   paysMaintenance: false,
   spouseNotWorking: false,
+  isVeteran: false,
   // עצמאי
   annualRevenue: 300000,
   annualExpenses: 60000,

@@ -153,43 +153,61 @@ export function ResultsPanel({
             <TaxBreakdownPie result={result} />
           </Card>
 
+          {/* Smart Insights */}
+          <SmartInsights result={result} />
+
           {/* Brackets */}
           {result.taxBreakdown.length > 0 && (
             <Card>
               <button onClick={() => setShowBreakdown(!showBreakdown)} className="w-full flex items-center justify-between text-sm text-white/60 hover:text-white transition-colors">
-                <span>מדרגות מס</span>
+                <span>מדרגות מס הכנסה</span>
                 {showBreakdown ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </button>
               {showBreakdown && (
-                <div className="mt-3 space-y-2">
-                  <div className="text-xs text-white/40 flex justify-between border-b border-white/10 pb-2">
-                    <span>שיעור</span><span>הכנסה</span><span>מס</span>
+                <div className="mt-3 space-y-1.5">
+                  <div className="grid grid-cols-4 text-xs text-white/30 border-b border-white/10 pb-2 gap-1">
+                    <span>מדרגה</span><span>טווח חודשי</span><span>הכנסה במדרגה</span><span>מס</span>
                   </div>
-                  {result.taxBreakdown.map((b, i) => (
-                    <div key={i} className="flex justify-between text-xs text-white/70">
-                      <span className="text-amber-400/80">{b.bracket}</span>
-                      <span>{fmt(b.income / 12)}/ח׳</span>
-                      <span>{fmt(b.tax / 12)}/ח׳</span>
+                  {result.taxBreakdown.map((b, i) => {
+                    const toM = b.to !== null ? fmt(b.to / 12) : '∞'
+                    const fromM = fmt(b.from / 12)
+                    return (
+                      <div key={i} className={clsx('grid grid-cols-4 text-xs gap-1 py-0.5 rounded px-1', b.isActive ? 'text-white/70' : 'text-white/20')}>
+                        <span className={b.isActive ? 'text-amber-400 font-semibold' : 'text-white/25'}>{b.bracket}</span>
+                        <span className="text-xs">{fromM}–{toM}</span>
+                        <span>{b.isActive ? `${fmt(b.income / 12)}/ח׳` : '—'}</span>
+                        <span>{b.isActive ? `${fmt(b.tax / 12)}/ח׳` : '—'}</span>
+                      </div>
+                    )
+                  })}
+                  <div className="border-t border-white/10 pt-2 space-y-1">
+                    <div className="flex justify-between text-xs text-white/40">
+                      <span>מס ברוטו לפני זיכויים</span>
+                      <span>{fmt(result.grossTaxBeforeCredits / 12)}/ח׳</span>
                     </div>
-                  ))}
-                  {result.creditAmount > 0 && (
-                    <div className="flex justify-between text-xs text-green-400 pt-2 border-t border-white/10">
-                      <span>זיכוי נקודות ({result.creditPoints} נק׳)</span>
-                      <span>−{fmt(result.creditAmount / 12)}/ח׳</span>
+                    {result.creditAmount > 0 && (
+                      <div className="flex justify-between text-xs text-green-400">
+                        <span>זיכוי נקודות ({result.creditPoints.toFixed(2)} נק׳)</span>
+                        <span>−{fmt(result.creditAmount / 12)}/ח׳</span>
+                      </div>
+                    )}
+                    {result.settlementDiscount > 0 && (
+                      <div className="flex justify-between text-xs text-green-400">
+                        <span>הנחת יישוב מזכה</span>
+                        <span>−{fmt(result.settlementDiscount / 12)}/ח׳</span>
+                      </div>
+                    )}
+                    {result.pensionTaxCredit > 0 && (
+                      <div className="flex justify-between text-xs text-green-400">
+                        <span>זיכוי מס פנסיה</span>
+                        <span>−{fmt(result.pensionTaxCredit / 12)}/ח׳</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between text-xs font-bold text-amber-400 border-t border-white/10 pt-1">
+                      <span>מס הכנסה סופי</span>
+                      <span>{fmt(result.deductions.incomeTax.monthly)}/ח׳</span>
                     </div>
-                  )}
-                  {result.settlementDiscount > 0 && (
-                    <div className="flex justify-between text-xs text-green-400">
-                      <span>הנחת יישוב מזכה</span>
-                      <span>−{fmt(result.settlementDiscount / 12)}/ח׳</span>
-                    </div>
-                  )}
-                  {result.pensionTaxCredit > 0 && (
-                    <div className="flex justify-between text-xs text-green-400">
-                      <span>זיכוי מס פנסיה</span>
-                      <span>−{fmt(result.pensionTaxCredit / 12)}/ח׳</span>
-                    </div>
-                  )}
+                  </div>
                 </div>
               )}
             </Card>
@@ -198,20 +216,28 @@ export function ResultsPanel({
           {/* Credits */}
           <Card>
             <button onClick={() => setShowCredits(!showCredits)} className="w-full flex items-center justify-between text-sm text-white/60 hover:text-white transition-colors">
-              <span>נקודות זיכוי — {result.creditPoints} נק׳</span>
+              <div className="flex items-center gap-2">
+                <span>נקודות זיכוי</span>
+                <span className="text-amber-400 font-bold">{result.creditPoints.toFixed(2)} נק׳</span>
+                <span className="text-white/30 text-xs">(={fmt(result.creditAmount / 12)}/ח׳)</span>
+              </div>
               {showCredits ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
             {showCredits && (
               <div className="mt-3 space-y-2">
+                <div className="text-xs text-white/30 mb-2">כל נקודת זיכוי שווה {`₪242`} לחודש (₪2,904 לשנה)</div>
                 {result.creditBreakdown.map((item, i) => (
-                  <div key={i} className="flex justify-between text-xs">
+                  <div key={i} className="flex items-center justify-between text-xs">
                     <span className="text-white/60">{item.label}</span>
-                    <Badge variant="gold">{item.points} נק׳</Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="gold">{item.points} נק׳</Badge>
+                      <span className="text-green-400 w-16 text-left">{fmt(item.points * 242)}/ח׳</span>
+                    </div>
                   </div>
                 ))}
                 <div className="border-t border-white/10 pt-2 flex justify-between text-xs font-bold">
-                  <span className="text-white/70">שווי כספי</span>
-                  <span className="text-amber-400">{fmt(result.creditAmount / 12)}/ח׳</span>
+                  <span className="text-white/70">סה״כ חיסכון מס</span>
+                  <span className="text-amber-400">{fmt(result.creditAmount / 12)}/ח׳ · {fmt(result.creditAmount)}/שנה</span>
                 </div>
               </div>
             )}
@@ -261,5 +287,66 @@ function DeductionRow({ label, monthly, annual, color, badge, bold }: {
         <div className="text-xs text-white/30">{fmt(annual)}/שנה</div>
       </div>
     </div>
+  )
+}
+
+function SmartInsights({ result }: { result: CalculatorResult }) {
+  const insights: { icon: string; text: string; color: string }[] = []
+
+  const effectivePct = Math.round((result.deductions.incomeTax.rate ?? 0) * 100)
+  const retained = Math.round(result.netPercent)
+  insights.push({
+    icon: '📊',
+    text: `מס הכנסה אפקטיבי ${effectivePct}% — על כל ₪100 ברוטו נשארים לכיס ₪${retained}`,
+    color: 'text-white/70'
+  })
+
+  if (result.creditAmount > 0) {
+    const activeBracket = [...result.taxBreakdown].reverse().find(b => b.isActive)
+    const topRate = activeBracket ? Math.round(activeBracket.rate * 100) : 0
+    insights.push({
+      icon: '🎯',
+      text: `נקודות הזיכוי שלך (${result.creditPoints.toFixed(2)}) חוסכות ${fmt(result.creditAmount / 12)} מסים בחודש — ${fmt(result.creditAmount)} בשנה`,
+      color: 'text-green-400/80'
+    })
+    if (topRate > 0) {
+      insights.push({
+        icon: '💡',
+        text: `המדרגה הגבוהה שלך היא ${topRate}% — כל תרומה לפנסיה/קרן השתלמות מוכרת מחסכת ${topRate} אגורות מס על כל שקל`,
+        color: 'text-blue-400/80'
+      })
+    }
+  }
+
+  if (result.settlementDiscount > 0) {
+    insights.push({
+      icon: '🏘️',
+      text: `הנחת יישוב מזכה חוסכת לך ${fmt(result.settlementDiscount / 12)} מסים בחודש`,
+      color: 'text-amber-400/80'
+    })
+  }
+
+  if (result.employerCost) {
+    const totalCost = result.employerCost.totalEmployerCost
+    const ratio = Math.round((result.netMonthly / totalCost) * 100)
+    insights.push({
+      icon: '🏢',
+      text: `המעסיק משלם ${fmt(totalCost)}/חודש — הנטו שלך הוא ${ratio}% מסך עלותך למעסיק`,
+      color: 'text-purple-400/80'
+    })
+  }
+
+  return (
+    <Card>
+      <div className="text-xs text-white/40 font-medium mb-3">תובנות חכמות</div>
+      <div className="space-y-2.5">
+        {insights.map((ins, i) => (
+          <div key={i} className="flex gap-2.5 text-xs">
+            <span className="shrink-0 mt-0.5">{ins.icon}</span>
+            <span className={ins.color}>{ins.text}</span>
+          </div>
+        ))}
+      </div>
+    </Card>
   )
 }

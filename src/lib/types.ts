@@ -111,6 +111,7 @@ export interface CalculatorInput {
   isSingleParent: boolean
   paysMaintenance: boolean
   spouseNotWorking: boolean
+  isVeteran: boolean
 
   // עצמאי
   annualRevenue: number
@@ -134,6 +135,9 @@ export interface TaxBracketBreakdown {
   income: number
   tax: number
   rate: number
+  isActive: boolean
+  from: number
+  to: number | null
 }
 
 export interface CreditBreakdownItem {
