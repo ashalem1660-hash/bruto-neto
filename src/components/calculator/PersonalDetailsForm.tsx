@@ -54,7 +54,7 @@ export function PersonalDetailsForm({ input, onChange }: Props) {
 
       <div>
         <label className="block text-sm text-white/60 mb-2">מצב משפחתי</label>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {MARITAL_OPTIONS.map(opt => (
             <button
               key={opt.value}

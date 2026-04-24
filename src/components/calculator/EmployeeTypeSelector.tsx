@@ -15,14 +15,14 @@ export function EmployeeTypeSelector({ value, onChange }: Props) {
           key={type}
           onClick={() => onChange(type)}
           className={clsx(
-            'relative flex flex-col items-center justify-center gap-3 p-6 rounded-2xl border-2 transition-all duration-200 group',
+            'relative flex flex-col items-center justify-center gap-2 p-4 sm:p-6 rounded-2xl border-2 transition-all duration-200 group',
             value === type
               ? 'border-amber-500 bg-amber-500/10 shadow-[0_0_30px_rgba(245,197,24,0.2)]'
               : 'border-white/15 bg-white/5 hover:border-white/30 hover:bg-white/10'
           )}
         >
-          <span className="text-4xl">{type === 'employee' ? '👔' : '💼'}</span>
-          <span className={clsx('text-xl font-bold', value === type ? 'text-amber-400' : 'text-white')}>
+          <span className="text-3xl sm:text-4xl">{type === 'employee' ? '👔' : '💼'}</span>
+          <span className={clsx('text-base sm:text-xl font-bold', value === type ? 'text-amber-400' : 'text-white')}>
             {type === 'employee' ? 'שכיר' : 'עצמאי'}
           </span>
           <span className="text-xs text-white/50 text-center">

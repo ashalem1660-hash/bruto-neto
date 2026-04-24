@@ -71,3 +71,47 @@ input[type="range"]::-moz-range-thumb {
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
 input[type="number"] { -moz-appearance: textfield; }
+
+/* ===== PRINT / PDF ===== */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  body { background: #fff !important; color: #111 !important; font-family: 'Heebo', Arial, sans-serif; direction: rtl; }
+
+  /* Hide everything except print target */
+  body > * { display: none !important; }
+  #print-report { display: block !important; }
+
+  #print-report {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+    color: #111;
+    background: #fff;
+  }
+
+  .print-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background: #fafafa;
+    break-inside: avoid;
+  }
+
+  .print-title { font-size: 22px; font-weight: 900; color: #111; margin-bottom: 4px; }
+  .print-subtitle { font-size: 13px; color: #666; margin-bottom: 20px; }
+  .print-section-title { font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 10px; border-bottom: 2px solid #F5C518; padding-bottom: 4px; }
+  .print-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+  .print-row:last-child { border-bottom: none; }
+  .print-label { color: #555; }
+  .print-value { font-weight: 700; color: #111; }
+  .print-value.deduction { color: #dc2626; }
+  .print-value.net { color: #16a34a; font-size: 16px; }
+  .print-value.accent { color: #d97706; }
+  .print-footer { text-align: center; font-size: 11px; color: #999; margin-top: 24px; }
+  .print-big-number { font-size: 32px; font-weight: 900; color: #d97706; }
+  .print-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .print-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+}

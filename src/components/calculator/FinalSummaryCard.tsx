@@ -170,13 +170,13 @@ export function FinalSummaryCard({ result }: Props) {
         style={{ background: 'rgba(245,197,24,0.07)', border: '1px solid rgba(245,197,24,0.18)' }}>
         <div>
           <div className="text-xs text-white/40 mb-1">נטו לחשבון הבנק</div>
-          <div className="text-3xl font-black text-amber-400 tabular-nums">₪{n(net)}</div>
+          <div className="text-2xl sm:text-3xl font-black text-amber-400 tabular-nums">₪{n(net)}</div>
           <div className="text-xs text-white/30 mt-0.5">
             {period === 'annual' ? `₪${n(result.netMonthly)} בחודש` : `₪${n(result.netAnnual)} בשנה`}
           </div>
         </div>
         <div className="text-right">
-          <div className="text-5xl font-black leading-none" style={{ color: 'rgba(245,197,24,0.5)' }}>{netPct}%</div>
+          <div className="text-3xl sm:text-5xl font-black leading-none" style={{ color: 'rgba(245,197,24,0.5)' }}>{netPct}%</div>
           <div className="text-xs text-white/30 mt-1">מהברוטו נשאר לך</div>
         </div>
       </div>

@@ -197,7 +197,7 @@ export default function HomePage() {
           </div>
 
           {/* Right — results */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2" id="results-section">
             <div className="lg:sticky lg:top-24">
               <div className="text-xs text-white/40 font-medium mb-3 text-center">תוצאות בזמן אמת</div>
               <ResultsPanel
@@ -216,7 +216,22 @@ export default function HomePage() {
         </div>
       </main>
 
-      <footer className="mt-16 border-t border-white/5 py-8">
+      {/* Mobile floating net bar */}
+      {result && (
+        <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 pb-safe">
+          <button
+            onClick={() => document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' })}
+            className="w-full flex items-center justify-between px-5 py-3.5 text-sm font-bold"
+            style={{ background: 'rgba(10,10,20,0.96)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(245,197,24,0.2)' }}
+          >
+            <span className="text-white/50 text-xs">נטו לחודש</span>
+            <span className="text-amber-400 text-xl font-black">₪{Math.round(result.netMonthly).toLocaleString('he-IL')}</span>
+            <span className="text-white/40 text-xs">← ראה תוצאות</span>
+          </button>
+        </div>
+      )}
+
+      <footer className="mt-16 border-t border-white/5 py-8 mb-16 lg:mb-0">
         <div className="max-w-7xl mx-auto px-4 text-center text-xs text-white/20 space-y-1">
           <p>ברוטו לנטו — מחשבון מיסוי ישראלי 2025</p>
           <p>החישובים מבוססים על נתוני רשות המסים ובטוח לאומי. לצרכי תכנון בלבד, אינו מהווה ייעוץ מס.</p>

@@ -6,6 +6,7 @@ import { SalaryFlowChart } from '@/components/charts/SalaryFlowChart'
 import { TotalCompensationView } from './TotalCompensationView'
 import { PensionProjector } from './PensionProjector'
 import { FinalSummaryCard } from './FinalSummaryCard'
+import { ExportButtons } from './ExportButtons'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import type { CalculatorResult } from '@/lib/types'
@@ -77,6 +78,12 @@ export function ResultsPanel({
 
   return (
     <div className="space-y-3">
+      {/* Hidden print target */}
+      <div id="print-report" style={{ display: 'none' }} />
+
+      {/* Export buttons */}
+      <ExportButtons result={result} />
+
       {/* Tabs */}
       <div className="flex gap-1 bg-white/5 rounded-2xl p-1">
         {TABS.map(tab => (
@@ -169,18 +176,31 @@ export function ResultsPanel({
               </button>
               {showBreakdown && (
                 <div className="mt-3 space-y-1.5">
-                  <div className="grid grid-cols-4 text-xs text-white/30 border-b border-white/10 pb-2 gap-1">
-                    <span>מדרגה</span><span>טווח חודשי</span><span>הכנסה במדרגה</span><span>מס</span>
+                  {/* Mobile: 3 cols, Desktop: 4 cols */}
+                  <div className="hidden sm:grid grid-cols-4 text-xs text-white/30 border-b border-white/10 pb-2 gap-1">
+                    <span>מדרגה</span><span>טווח חודשי</span><span>הכנסה</span><span>מס</span>
+                  </div>
+                  <div className="grid sm:hidden grid-cols-3 text-xs text-white/30 border-b border-white/10 pb-2 gap-1">
+                    <span>מדרגה</span><span>טווח</span><span>מס</span>
                   </div>
                   {result.taxBreakdown.map((b, i) => {
                     const toM = b.to !== null ? fmt(b.to / 12) : '∞'
                     const fromM = fmt(b.from / 12)
                     return (
-                      <div key={i} className={clsx('grid grid-cols-4 text-xs gap-1 py-0.5 rounded px-1', b.isActive ? 'text-white/70' : 'text-white/20')}>
-                        <span className={b.isActive ? 'text-amber-400 font-semibold' : 'text-white/25'}>{b.bracket}</span>
-                        <span className="text-xs">{fromM}–{toM}</span>
-                        <span>{b.isActive ? `${fmt(b.income / 12)}/ח׳` : '—'}</span>
-                        <span>{b.isActive ? `${fmt(b.tax / 12)}/ח׳` : '—'}</span>
+                      <div key={i}>
+                        {/* Desktop row */}
+                        <div className={clsx('hidden sm:grid grid-cols-4 text-xs gap-1 py-0.5 rounded px-1', b.isActive ? 'text-white/70' : 'text-white/20')}>
+                          <span className={b.isActive ? 'text-amber-400 font-semibold' : 'text-white/25'}>{b.bracket}</span>
+                          <span>{fromM}–{toM}</span>
+                          <span>{b.isActive ? `${fmt(b.income / 12)}/ח׳` : '—'}</span>
+                          <span>{b.isActive ? `${fmt(b.tax / 12)}/ח׳` : '—'}</span>
+                        </div>
+                        {/* Mobile row */}
+                        <div className={clsx('grid sm:hidden grid-cols-3 text-xs gap-1 py-0.5 rounded px-1', b.isActive ? 'text-white/70' : 'text-white/20')}>
+                          <span className={b.isActive ? 'text-amber-400 font-semibold' : 'text-white/25'}>{b.bracket}</span>
+                          <span className="text-xs">{fromM}–{toM}</span>
+                          <span>{b.isActive ? `${fmt(b.tax / 12)}/ח׳` : '—'}</span>
+                        </div>
                       </div>
                     )
                   })}
