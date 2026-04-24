@@ -100,7 +100,7 @@ export function TotalCompensationView({ result }: Props) {
       {/* סיכום */}
       <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
         <div className="text-xs text-white/40 mb-3 text-center">התמונה המלאה — חודשי</div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 text-center">
           <SummaryBox label="עלות למעסיק" value={fmt(ec.totalEmployerCost)} color="blue" />
           <SummaryBox label="נטו לבנק" value={fmt(result.netMonthly)} color="green" />
           <SummaryBox label="נצבר לי" value={fmt(totalAccruingMonthly + (sf ? sf.employerContribution : 0))} color="amber" />

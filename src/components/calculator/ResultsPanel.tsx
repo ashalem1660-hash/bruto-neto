@@ -81,9 +81,6 @@ export function ResultsPanel({
       {/* Hidden print target */}
       <div id="print-report" style={{ display: 'none' }} />
 
-      {/* Export buttons */}
-      <ExportButtons result={result} />
-
       {/* Tabs */}
       <div className="flex gap-1 bg-white/5 rounded-2xl p-1">
         {TABS.map(tab => (
@@ -266,6 +263,18 @@ export function ResultsPanel({
               </div>
             )}
           </Card>
+
+          {/* Export CTA */}
+          <div className="rounded-2xl overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, rgba(245,197,24,0.08) 0%, rgba(245,197,24,0.04) 100%)', border: '1px solid rgba(245,197,24,0.2)' }}>
+            <div className="px-4 pt-4 pb-3 border-b border-amber-500/15">
+              <div className="text-sm font-bold text-white mb-0.5">הפקת דוח מותאם אישית</div>
+              <div className="text-xs text-white/40">ייצא את כל הנתונים שלך לקובץ מסודר</div>
+            </div>
+            <div className="p-4">
+              <ExportButtons result={result} />
+            </div>
+          </div>
         </div>
       )}
 

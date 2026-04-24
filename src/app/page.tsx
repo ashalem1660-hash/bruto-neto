@@ -69,10 +69,10 @@ export default function HomePage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
 
           {/* Left — form */}
-          <div className="lg:col-span-3 space-y-5">
+          <div className="xl:col-span-3 space-y-5">
             <div className="text-center lg:text-right">
               <p className="text-amber-400/70 text-sm font-semibold mb-1 tracking-wide">
                 כאן בודקים כמה נטו נשאר מהברוטו
@@ -197,9 +197,12 @@ export default function HomePage() {
           </div>
 
           {/* Right — results */}
-          <div className="lg:col-span-2" id="results-section">
-            <div className="lg:sticky lg:top-24">
-              <div className="text-xs text-white/40 font-medium mb-3 text-center">תוצאות בזמן אמת</div>
+          <div className="xl:col-span-2" id="results-section">
+            <div className="xl:sticky xl:top-24">
+              <div className="mb-3 text-center">
+                <div className="text-xs text-amber-400/70 font-semibold tracking-wide">תוצאות בזמן אמת</div>
+                <div className="text-xs text-white/30 mt-0.5">מלא פרטים ← להפקת דוח מותאם אישית</div>
+              </div>
               <ResultsPanel
                 result={result}
                 currentAge={input.age}
@@ -218,7 +221,7 @@ export default function HomePage() {
 
       {/* Mobile floating net bar */}
       {result && (
-        <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 pb-safe">
+        <div className="xl:hidden fixed bottom-0 inset-x-0 z-50 pb-safe">
           <button
             onClick={() => document.getElementById('results-section')?.scrollIntoView({ behavior: 'smooth' })}
             className="w-full flex items-center justify-between px-5 py-3.5 text-sm font-bold"
