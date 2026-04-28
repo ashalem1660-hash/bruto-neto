@@ -20,7 +20,7 @@ export function PersonalDetailsForm({ input, onChange }: Props) {
     <div className="space-y-5">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm text-white/60 mb-2">מגדר</label>
+          <label className="block text-sm text-gray-600 mb-2">מגדר</label>
           <div className="grid grid-cols-2 gap-2">
             {(['male', 'female'] as const).map(g => (
               <button
@@ -29,8 +29,8 @@ export function PersonalDetailsForm({ input, onChange }: Props) {
                 className={clsx(
                   'py-2 rounded-xl text-sm font-medium border transition-all',
                   input.gender === g
-                    ? 'border-amber-500 bg-amber-500/15 text-amber-400'
-                    : 'border-white/15 bg-white/5 text-white/60 hover:border-white/30'
+                    ? 'border-violet-500 bg-violet-50 text-violet-600'
+                    : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
                 )}
               >
                 {g === 'male' ? '👨 גבר' : '👩 אישה'}
@@ -39,21 +39,21 @@ export function PersonalDetailsForm({ input, onChange }: Props) {
           </div>
         </div>
         <div>
-          <label className="block text-sm text-white/60 mb-2">גיל</label>
+          <label className="block text-sm text-gray-600 mb-2">גיל</label>
           <input
             type="number"
             value={input.age}
             min={18}
             max={100}
             onChange={e => onChange({ age: Number(e.target.value) })}
-            className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-amber-500 transition-colors text-center"
+            className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 focus:outline-none focus:border-violet-500 transition-colors text-center"
             dir="ltr"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm text-white/60 mb-2">מצב משפחתי</label>
+        <label className="block text-sm text-gray-600 mb-2">מצב משפחתי</label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {MARITAL_OPTIONS.map(opt => (
             <button
@@ -62,8 +62,8 @@ export function PersonalDetailsForm({ input, onChange }: Props) {
               className={clsx(
                 'py-2 rounded-xl text-xs font-medium border transition-all',
                 input.maritalStatus === opt.value
-                  ? 'border-amber-500 bg-amber-500/15 text-amber-400'
-                  : 'border-white/15 bg-white/5 text-white/60 hover:border-white/30'
+                  ? 'border-violet-500 bg-violet-50 text-violet-600'
+                  : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
               )}
             >
               {opt.label}

@@ -15,7 +15,7 @@ export function DisabilityInput({ disability, onChange }: Props) {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-white/60">נכות אישית</span>
+          <span className="text-sm text-gray-600">נכות אישית</span>
           <Tooltip content="נכות בשיעור 50%+ מזכה בנקודת זיכוי אחת. נכות 90%+ או עיוורון מזכים ב-2 נקודות זיכוי." />
         </div>
         <Toggle
@@ -25,11 +25,11 @@ export function DisabilityInput({ disability, onChange }: Props) {
       </div>
 
       {disability.hasDisability && (
-        <div className="space-y-3 bg-white/5 rounded-xl p-4">
+        <div className="space-y-3 bg-gray-50 border border-gray-200 rounded-xl p-4">
           <div>
             <div className="flex justify-between text-sm mb-2">
-              <span className="text-white/60">אחוז נכות</span>
-              <span className="text-amber-400 font-bold">{disability.percentage}%</span>
+              <span className="text-gray-600">אחוז נכות</span>
+              <span className="text-violet-600 font-bold">{disability.percentage}%</span>
             </div>
             <Slider
               value={disability.percentage}
@@ -44,11 +44,11 @@ export function DisabilityInput({ disability, onChange }: Props) {
               type="checkbox"
               checked={disability.isBlind}
               onChange={e => onChange({ ...disability, isBlind: e.target.checked })}
-              className="w-4 h-4 rounded accent-amber-500"
+              className="w-4 h-4 rounded accent-violet-600"
             />
-            <span className="text-sm text-white/60">עיוורון</span>
+            <span className="text-sm text-gray-600">עיוורון</span>
           </label>
-          <div className="text-xs text-white/40">
+          <div className="text-xs text-gray-500">
             {disability.isBlind || disability.percentage >= 100
               ? '→ 2 נקודות זיכוי'
               : disability.percentage >= 90

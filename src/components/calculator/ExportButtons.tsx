@@ -180,8 +180,7 @@ export function ExportButtons({ result }: Props) {
     <div className="flex gap-2">
       <button
         onClick={exportExcel}
-        className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all hover:scale-105 active:scale-95"
-        style={{ background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.3)', color: '#10b981' }}
+        className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all hover:scale-105 active:scale-95 bg-green-50 border border-green-200 text-green-700 hover:bg-green-100"
       >
         <span>📊</span>
         <span>Excel</span>
@@ -189,8 +188,7 @@ export function ExportButtons({ result }: Props) {
       <button
         onClick={exportPDF}
         disabled={printing}
-        className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
-        style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)', color: '#ef4444' }}
+        className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all hover:scale-105 active:scale-95 disabled:opacity-50 bg-red-50 border border-red-200 text-red-600 hover:bg-red-100"
       >
         <span>📄</span>
         <span>{printing ? 'מכין...' : 'PDF'}</span>

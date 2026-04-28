@@ -15,7 +15,7 @@ export function Toggle({ checked, onChange, label, disabled }: ToggleProps) {
       <div
         className={clsx(
           'relative w-11 h-6 rounded-full transition-colors duration-200',
-          checked ? 'bg-amber-500' : 'bg-white/20'
+          checked ? 'bg-violet-600' : 'bg-gray-200'
         )}
         onClick={() => !disabled && onChange(!checked)}
       >
@@ -26,7 +26,7 @@ export function Toggle({ checked, onChange, label, disabled }: ToggleProps) {
           )}
         />
       </div>
-      {label && <span className="text-sm text-white/80">{label}</span>}
+      {label && <span className="text-sm text-gray-700">{label}</span>}
     </label>
   )
 }

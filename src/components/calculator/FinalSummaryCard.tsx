@@ -14,13 +14,13 @@ type Period = 'monthly' | 'annual'
 const n = (v: number) => Math.round(v).toLocaleString('he-IL')
 
 const COLORS: Record<string, { hex: string; bg: string; text: string }> = {
-  tax:     { hex: '#ef4444', bg: 'bg-red-500',    text: 'text-red-400' },
-  bl:      { hex: '#3b82f6', bg: 'bg-blue-500',   text: 'text-blue-400' },
-  briut:   { hex: '#a855f7', bg: 'bg-purple-500', text: 'text-purple-400' },
-  pension: { hex: '#f97316', bg: 'bg-orange-500', text: 'text-orange-400' },
-  study:   { hex: '#8b5cf6', bg: 'bg-violet-500', text: 'text-violet-400' },
-  net:     { hex: '#F5C518', bg: 'bg-amber-400',  text: 'text-amber-400' },
-  accrual: { hex: '#10b981', bg: 'bg-emerald-500','text': 'text-emerald-400' },
+  tax:     { hex: '#dc2626', bg: 'bg-red-500',    text: 'text-red-600' },
+  bl:      { hex: '#2563eb', bg: 'bg-blue-500',   text: 'text-blue-600' },
+  briut:   { hex: '#7c3aed', bg: 'bg-violet-600', text: 'text-violet-600' },
+  pension: { hex: '#ea580c', bg: 'bg-orange-600', text: 'text-orange-600' },
+  study:   { hex: '#6d28d9', bg: 'bg-violet-700', text: 'text-violet-700' },
+  net:     { hex: '#16a34a', bg: 'bg-green-600',  text: 'text-green-600' },
+  accrual: { hex: '#16a34a', bg: 'bg-green-600',  text: 'text-green-600' },
 }
 
 interface RowData {
@@ -78,7 +78,6 @@ export function FinalSummaryCard({ result }: Props) {
   const net = result.netMonthly * m
   const netPct = Math.round(result.netPercent)
 
-  // accrual rows (employee only)
   const pensionTotal = result.employerCost
     ? (result.deductions.pension.monthly + result.employerCost.pensionEmployer + result.employerCost.severancePay) * m
     : result.deductions.pension.monthly * m
@@ -90,15 +89,15 @@ export function FinalSummaryCard({ result }: Props) {
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <div className="text-sm font-bold text-white">סיכום פיננסי מלא</div>
-          <div className="text-xs text-white/30 mt-0.5">לאן הולך כל שקל</div>
+          <div className="text-sm font-bold text-gray-900">סיכום פיננסי מלא</div>
+          <div className="text-xs text-gray-400 mt-0.5">לאן הולך כל שקל</div>
         </div>
-        <div className="flex bg-white/8 rounded-xl p-1 gap-1" style={{ background: 'rgba(255,255,255,0.06)' }}>
+        <div className="flex bg-gray-100 rounded-xl p-1 gap-1">
           {(['monthly', 'annual'] as const).map(p => (
             <button key={p} onClick={() => setPeriod(p)}
               className={clsx(
                 'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200',
-                period === p ? 'bg-amber-500 text-gray-900 shadow-sm' : 'text-white/50 hover:text-white'
+                period === p ? 'bg-violet-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-800'
               )}>
               {p === 'monthly' ? 'חודשי' : 'שנתי'}
             </button>
@@ -107,12 +106,11 @@ export function FinalSummaryCard({ result }: Props) {
       </div>
 
       {/* Gross */}
-      <div className="flex items-center justify-between rounded-2xl px-4 py-3 mb-4"
-        style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
-        <span className="text-sm text-white/60">הכנסה ברוטו</span>
+      <div className="flex items-center justify-between rounded-2xl px-4 py-3 mb-4 bg-gray-50 border border-gray-200">
+        <span className="text-sm text-gray-600">הכנסה ברוטו</span>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-white/30 bg-white/5 px-2 py-0.5 rounded-full">100%</span>
-          <span className="text-lg font-black text-white">₪{n(gross)}</span>
+          <span className="text-xs text-gray-400 bg-gray-200 px-2 py-0.5 rounded-full">100%</span>
+          <span className="text-lg font-black text-gray-900">₪{n(gross)}</span>
         </div>
       </div>
 
@@ -122,7 +120,7 @@ export function FinalSummaryCard({ result }: Props) {
           <div key={row.key} className="h-full transition-all duration-700"
             style={{ width: `${row.pct}%`, background: COLORS[row.key]?.hex }} />
         ))}
-        <div className="h-full flex-1 transition-all duration-700" style={{ background: COLORS.net.hex, opacity: 0.6 }} />
+        <div className="h-full flex-1 transition-all duration-700" style={{ background: COLORS.net.hex, opacity: 0.7 }} />
       </div>
 
       {/* Deduction rows */}
@@ -134,9 +132,9 @@ export function FinalSummaryCard({ result }: Props) {
               <div className="flex items-center justify-between text-sm mb-1">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: c.hex }} />
-                  <span className="text-white/70">{row.label}</span>
+                  <span className="text-gray-700">{row.label}</span>
                   {row.sublabel && (
-                    <span className="text-xs text-white/25 hidden sm:inline">({row.sublabel})</span>
+                    <span className="text-xs text-gray-400 hidden sm:inline">({row.sublabel})</span>
                   )}
                 </div>
                 <div className="flex items-center gap-2.5">
@@ -149,9 +147,9 @@ export function FinalSummaryCard({ result }: Props) {
                   </span>
                 </div>
               </div>
-              <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+              <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                 <div className="h-full rounded-full transition-all duration-700"
-                  style={{ width: `${Math.min(100, row.pct * 2.5)}%`, background: c.hex, opacity: 0.55 }} />
+                  style={{ width: `${Math.min(100, row.pct * 2.5)}%`, background: c.hex, opacity: 0.5 }} />
               </div>
             </div>
           )
@@ -160,31 +158,30 @@ export function FinalSummaryCard({ result }: Props) {
 
       {/* Separator */}
       <div className="flex items-center gap-3 mb-4">
-        <div className="flex-1 h-px bg-white/10" />
-        <span className="text-xs text-white/20">סה״כ ניכויים {Math.round(totalDeductionsPct)}%</span>
-        <div className="flex-1 h-px bg-white/10" />
+        <div className="flex-1 h-px bg-gray-200" />
+        <span className="text-xs text-gray-400">סה״כ ניכויים {Math.round(totalDeductionsPct)}%</span>
+        <div className="flex-1 h-px bg-gray-200" />
       </div>
 
       {/* Net to bank */}
-      <div className="rounded-2xl px-4 py-4 mb-4 flex items-center justify-between"
-        style={{ background: 'rgba(245,197,24,0.07)', border: '1px solid rgba(245,197,24,0.18)' }}>
+      <div className="rounded-2xl px-4 py-4 mb-4 flex items-center justify-between bg-green-50 border border-green-200">
         <div>
-          <div className="text-xs text-white/40 mb-1">נטו לחשבון הבנק</div>
-          <div className="text-2xl sm:text-3xl font-black text-amber-400 tabular-nums">₪{n(net)}</div>
-          <div className="text-xs text-white/30 mt-0.5">
+          <div className="text-xs text-gray-500 mb-1">נטו לחשבון הבנק</div>
+          <div className="text-2xl sm:text-3xl font-black text-green-600 tabular-nums">₪{n(net)}</div>
+          <div className="text-xs text-gray-400 mt-0.5">
             {period === 'annual' ? `₪${n(result.netMonthly)} בחודש` : `₪${n(result.netAnnual)} בשנה`}
           </div>
         </div>
         <div className="text-right">
-          <div className="text-3xl sm:text-5xl font-black leading-none" style={{ color: 'rgba(245,197,24,0.5)' }}>{netPct}%</div>
-          <div className="text-xs text-white/30 mt-1">מהברוטו נשאר לך</div>
+          <div className="text-3xl sm:text-5xl font-black leading-none text-green-500">{netPct}%</div>
+          <div className="text-xs text-gray-400 mt-1">מהברוטו נשאר לך</div>
         </div>
       </div>
 
       {/* Accruals (employee) */}
       {result.employerCost && (
         <>
-          <div className="text-xs text-white/30 font-medium mb-3">נצבר בשבילך (לא לחשבון, אבל שלך)</div>
+          <div className="text-xs text-gray-400 font-medium mb-3">נצבר בשבילך (לא לחשבון, אבל שלך)</div>
           <div className="space-y-2 mb-4">
             <AccrualLine
               label={`פנסיה (עובד ${n(result.deductions.pension.monthly * m)} + מעסיק+פיצויים ${n((result.employerCost.pensionEmployer + result.employerCost.severancePay) * m)})`}
@@ -200,9 +197,9 @@ export function FinalSummaryCard({ result }: Props) {
             )}
           </div>
 
-          <div className="flex items-center justify-between border-t border-white/10 pt-3">
-            <span className="text-sm text-white/40">עלות כוללת למעסיק</span>
-            <span className="font-bold text-white text-lg">₪{n(result.employerCost.totalEmployerCost * m)}</span>
+          <div className="flex items-center justify-between border-t border-gray-200 pt-3">
+            <span className="text-sm text-gray-500">עלות כוללת למעסיק</span>
+            <span className="font-bold text-gray-900 text-lg">₪{n(result.employerCost.totalEmployerCost * m)}</span>
           </div>
         </>
       )}
@@ -215,9 +212,9 @@ function AccrualLine({ label, value, color }: { label: string; value: number; co
     <div className="flex items-start justify-between gap-2 text-sm px-1">
       <div className="flex items-start gap-2 min-w-0">
         <div className="w-2.5 h-2.5 rounded-full shrink-0 mt-1" style={{ background: color }} />
-        <span className="text-white/50 text-xs leading-snug">{label}</span>
+        <span className="text-gray-500 text-xs leading-snug">{label}</span>
       </div>
-      <span className="font-semibold text-emerald-400 shrink-0">+₪{Math.round(value).toLocaleString('he-IL')}</span>
+      <span className="font-semibold text-green-600 shrink-0">+₪{Math.round(value).toLocaleString('he-IL')}</span>
     </div>
   )
 }

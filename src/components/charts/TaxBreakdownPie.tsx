@@ -7,7 +7,7 @@ interface Props {
   result: CalculatorResult
 }
 
-const COLORS = ['#10b981', '#F5C518', '#3b82f6', '#8b5cf6', '#ef4444']
+const COLORS = ['#16a34a', '#dc2626', '#2563eb', '#7c3aed', '#ea580c']
 
 const fmt = (v: number) => `₪${Math.round(v).toLocaleString('he-IL')}`
 
@@ -41,11 +41,12 @@ export function TaxBreakdownPie({ result }: Props) {
           <Tooltip
             formatter={(v) => fmt(Number(v))}
             contentStyle={{
-              background: '#1a1a2e',
-              border: '1px solid rgba(255,255,255,0.1)',
+              background: '#fff',
+              border: '1px solid #E5E7EB',
               borderRadius: '12px',
-              color: '#fff',
-              direction: 'rtl'
+              color: '#111827',
+              direction: 'rtl',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
             }}
           />
         </PieChart>

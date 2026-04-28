@@ -23,7 +23,7 @@ export function SettlementSelect({ settlement, settlements, onChange }: Props) {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-white/60">יישוב מזכה</span>
+          <span className="text-sm text-gray-600">יישוב מזכה</span>
           <Tooltip content="תושבי יישובים מזכים זכאים להנחה על מס הכנסה: קטגוריה A — 20% הנחה, קטגוריה B — 10% הנחה, על הכנסה עד ₪199,000 בשנה." />
         </div>
         <Toggle
@@ -39,11 +39,11 @@ export function SettlementSelect({ settlement, settlements, onChange }: Props) {
             placeholder="חפש יישוב..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors"
+            className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 text-sm focus:outline-none focus:border-violet-500 transition-colors"
           />
-          <div className="max-h-40 overflow-y-auto space-y-1 rounded-xl border border-white/10 bg-white/5 p-2">
+          <div className="max-h-40 overflow-y-auto space-y-1 rounded-xl border border-gray-200 bg-white p-2">
             {filtered.length === 0 ? (
-              <p className="text-white/30 text-xs text-center py-2">לא נמצאו יישובים</p>
+              <p className="text-gray-400 text-xs text-center py-2">לא נמצאו יישובים</p>
             ) : (
               filtered.map(s => (
                 <button
@@ -55,16 +55,16 @@ export function SettlementSelect({ settlement, settlements, onChange }: Props) {
                   className={clsx(
                     'w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all',
                     settlement.name === s.name
-                      ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                      : 'hover:bg-white/10 text-white/70'
+                      ? 'bg-violet-50 text-violet-600 border border-violet-200'
+                      : 'hover:bg-gray-50 text-gray-700'
                   )}
                 >
                   <span>{s.name}</span>
                   <span className={clsx(
                     'text-xs px-2 py-0.5 rounded-full border',
                     s.category === 'A'
-                      ? 'text-amber-400 border-amber-500/30 bg-amber-500/10'
-                      : 'text-blue-400 border-blue-500/30 bg-blue-500/10'
+                      ? 'text-violet-600 border-violet-200 bg-violet-50'
+                      : 'text-blue-600 border-blue-200 bg-blue-50'
                   )}>
                     {s.category} — {s.category === 'A' ? '20%' : '10%'}
                   </span>
@@ -73,7 +73,7 @@ export function SettlementSelect({ settlement, settlements, onChange }: Props) {
             )}
           </div>
           {settlement.name && (
-            <div className="text-xs text-green-400 flex items-center gap-1">
+            <div className="text-xs text-green-600 flex items-center gap-1">
               ✓ נבחר: {settlement.name} — הנחה {settlement.category === 'A' ? '20%' : '10%'}
             </div>
           )}

@@ -27,11 +27,11 @@ export function Slider({ value, min, max, step = 1, onChange, className, showVal
         onChange={e => onChange(Number(e.target.value))}
         className="w-full h-2 rounded-full appearance-none cursor-pointer"
         style={{
-          background: `linear-gradient(to left, rgba(255,255,255,0.15) ${100 - pct}%, #F5C518 ${100 - pct}%)`
+          background: `linear-gradient(to left, #E5E7EB ${100 - pct}%, #7C3AED ${100 - pct}%)`
         }}
       />
       {showValue && (
-        <div className="text-center mt-2 text-amber-400 font-bold text-lg">
+        <div className="text-center mt-2 text-violet-600 font-bold text-lg">
           {formatValue ? formatValue(value) : value}
         </div>
       )}

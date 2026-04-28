@@ -22,7 +22,7 @@ export function AdditionalOptions({ input, onChange }: Props) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-white/60">הורה יחיד</span>
+          <span className="text-sm text-gray-600">הורה יחיד</span>
           <Tooltip content="הורה יחיד שיש לו ילדים זכאי לנקודת זיכוי נוספת." />
         </div>
         <Toggle checked={input.isSingleParent} onChange={v => onChange({ isSingleParent: v })} />
@@ -30,7 +30,7 @@ export function AdditionalOptions({ input, onChange }: Props) {
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-white/60">משלם מזונות</span>
+          <span className="text-sm text-gray-600">משלם מזונות</span>
           <Tooltip content="מי שמשלם מזונות על פי פסק דין זכאי לנקודת זיכוי אחת נוספת." />
         </div>
         <Toggle checked={input.paysMaintenance} onChange={v => onChange({ paysMaintenance: v })} />
@@ -38,7 +38,7 @@ export function AdditionalOptions({ input, onChange }: Props) {
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-white/60">עולה חדש</span>
+          <span className="text-sm text-gray-600">עולה חדש</span>
           <Tooltip content="עולה חדש זכאי ל-3 נקודות זיכוי בשנים הראשונות לעלייה." />
         </div>
         <Toggle checked={input.isNewImmigrant} onChange={v => onChange({ isNewImmigrant: v })} />
@@ -46,7 +46,7 @@ export function AdditionalOptions({ input, onChange }: Props) {
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-white/60">בן/ת זוג לא עובד/ת</span>
+          <span className="text-sm text-gray-600">בן/ת זוג לא עובד/ת</span>
           <Tooltip content="בתנאים מסוימים (נכות, גיל פרישה) ניתנת נקודת זיכוי נוספת בגין בן/ת זוג שאינו עובד." />
         </div>
         <Toggle checked={input.spouseNotWorking} onChange={v => onChange({ spouseNotWorking: v })} />
@@ -54,17 +54,17 @@ export function AdditionalOptions({ input, onChange }: Props) {
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-white/60">חייל/ת משוחרר/ת</span>
+          <span className="text-sm text-gray-600">חייל/ת משוחרר/ת</span>
           <Tooltip content="מי שסיים שירות חובה מלא בצבא זכאי לנקודת זיכוי אחת נוספת (בשנת השחרור ואחריה)." />
         </div>
         <Toggle checked={input.isVeteran} onChange={v => onChange({ isVeteran: v })} />
       </div>
 
       {/* תואר ראשון */}
-      <div className="space-y-2 border-t border-white/10 pt-3">
+      <div className="space-y-2 border-t border-gray-200 pt-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-white/60">תואר ראשון</span>
+            <span className="text-sm text-gray-600">תואר ראשון</span>
             <Tooltip content="בוגרי תואר ראשון משנת 2023 ואילך זכאים לנקודת זיכוי אחת לשנה, עד 3 שנות מס לאחר שנת הסיום." />
           </div>
           <Toggle checked={input.hasBachelors} onChange={v => onChange({ hasBachelors: v })} />
@@ -72,22 +72,22 @@ export function AdditionalOptions({ input, onChange }: Props) {
         {input.hasBachelors && (
           <div className="pr-4 space-y-1.5">
             <div className="flex items-center gap-3">
-              <label className="text-xs text-white/40 w-28">שנת סיום לימודים</label>
+              <label className="text-xs text-gray-400 w-28">שנת סיום לימודים</label>
               <input
                 type="number"
                 value={input.bachelorGraduationYear}
                 min={2020} max={CURRENT_YEAR}
                 onChange={e => onChange({ bachelorGraduationYear: Number(e.target.value) })}
-                className="w-24 bg-white/10 border border-white/20 rounded-xl px-3 py-1.5 text-white text-sm focus:outline-none focus:border-amber-500 text-center"
+                className="w-24 bg-white border border-gray-200 rounded-xl px-3 py-1.5 text-gray-900 text-sm focus:outline-none focus:border-violet-500 text-center"
               />
             </div>
             {bachelorEligible
-              ? <div className="text-xs text-green-400">✓ זכאי — שנה {bachelorYearsSince} מתוך 3 (1 נק׳)</div>
+              ? <div className="text-xs text-green-600">✓ זכאי — שנה {bachelorYearsSince} מתוך 3 (1 נק׳)</div>
               : input.bachelorGraduationYear < 2023
-                ? <div className="text-xs text-white/30">✗ הזכאות חלה רק על בוגרי 2023 ואילך</div>
+                ? <div className="text-xs text-gray-400">✗ הזכאות חלה רק על בוגרי 2023 ואילך</div>
                 : bachelorYearsSince < 1
-                  ? <div className="text-xs text-white/30">✗ הזכאות מתחילה בשנת המס שאחרי הסיום</div>
-                  : <div className="text-xs text-white/30">✗ חלפו יותר מ-3 שנים מהסיום</div>
+                  ? <div className="text-xs text-gray-400">✗ הזכאות מתחילה בשנת המס שאחרי הסיום</div>
+                  : <div className="text-xs text-gray-400">✗ חלפו יותר מ-3 שנים מהסיום</div>
             }
           </div>
         )}
@@ -97,7 +97,7 @@ export function AdditionalOptions({ input, onChange }: Props) {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-white/60">תואר שני</span>
+            <span className="text-sm text-gray-600">תואר שני</span>
             <Tooltip content="בוגרי תואר שני בישראל משנת 2005 ואילך זכאים לחצי נקודת זיכוי לשנה." />
           </div>
           <Toggle checked={input.hasMasters} onChange={v => onChange({ hasMasters: v })} />
@@ -105,20 +105,20 @@ export function AdditionalOptions({ input, onChange }: Props) {
         {input.hasMasters && (
           <div className="pr-4 space-y-1.5">
             <div className="flex items-center gap-3">
-              <label className="text-xs text-white/40 w-28">שנת סיום לימודים</label>
+              <label className="text-xs text-gray-400 w-28">שנת סיום לימודים</label>
               <input
                 type="number"
                 value={input.masterGraduationYear}
                 min={2005} max={CURRENT_YEAR}
                 onChange={e => onChange({ masterGraduationYear: Number(e.target.value) })}
-                className="w-24 bg-white/10 border border-white/20 rounded-xl px-3 py-1.5 text-white text-sm focus:outline-none focus:border-amber-500 text-center"
+                className="w-24 bg-white border border-gray-200 rounded-xl px-3 py-1.5 text-gray-900 text-sm focus:outline-none focus:border-violet-500 text-center"
               />
             </div>
             {masterEligible
-              ? <div className="text-xs text-green-400">✓ זכאי (0.5 נק׳ לשנה)</div>
+              ? <div className="text-xs text-green-600">✓ זכאי (0.5 נק׳ לשנה)</div>
               : input.masterGraduationYear < 2005
-                ? <div className="text-xs text-white/30">✗ הזכאות חלה רק על בוגרי 2005 ואילך</div>
-                : <div className="text-xs text-white/30">✗ הזכאות מתחילה בשנת המס שאחרי הסיום</div>
+                ? <div className="text-xs text-gray-400">✗ הזכאות חלה רק על בוגרי 2005 ואילך</div>
+                : <div className="text-xs text-gray-400">✗ הזכאות מתחילה בשנת המס שאחרי הסיום</div>
             }
           </div>
         )}

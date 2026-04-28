@@ -32,7 +32,7 @@ export function StudyFundInput({ input, onChange }: Props) {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-white/60">קרן השתלמות</span>
+          <span className="text-sm text-gray-600">קרן השתלמות</span>
           <Tooltip content={
             isSelf
               ? 'עצמאי יכול להפריש עד 4.5% מהכנסתו לקרן השתלמות — פטורה ממס רווחי הון ומוכרת כהוצאה! ניתן למשוך לאחר 6 שנים.'
@@ -46,12 +46,12 @@ export function StudyFundInput({ input, onChange }: Props) {
       </div>
 
       {hasIt && (
-        <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-3">
+        <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 space-y-3">
           {!isSelf && (
             <>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs text-white/40 block mb-1">מעסיק %</label>
+                  <label className="text-xs text-gray-400 block mb-1">מעסיק %</label>
                   <div className="flex items-center gap-1">
                     <input
                       type="number"
@@ -60,14 +60,14 @@ export function StudyFundInput({ input, onChange }: Props) {
                       max={15}
                       step={0.5}
                       onChange={e => onChange({ studyFundEmployerRate: Number(e.target.value) })}
-                      className="w-20 bg-white/10 border border-white/20 rounded-lg px-2 py-1.5 text-white text-sm focus:outline-none focus:border-amber-500 text-center"
+                      className="w-20 bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-gray-900 text-sm focus:outline-none focus:border-violet-500 text-center"
                       dir="ltr"
                     />
-                    <span className="text-white/40 text-xs">%</span>
+                    <span className="text-gray-400 text-xs">%</span>
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs text-white/40 block mb-1">עובד %</label>
+                  <label className="text-xs text-gray-400 block mb-1">עובד %</label>
                   <div className="flex items-center gap-1">
                     <input
                       type="number"
@@ -76,22 +76,22 @@ export function StudyFundInput({ input, onChange }: Props) {
                       max={10}
                       step={0.5}
                       onChange={e => onChange({ studyFundEmployeeRate: Number(e.target.value) })}
-                      className="w-20 bg-white/10 border border-white/20 rounded-lg px-2 py-1.5 text-white text-sm focus:outline-none focus:border-amber-500 text-center"
+                      className="w-20 bg-white border border-gray-200 rounded-lg px-2 py-1.5 text-gray-900 text-sm focus:outline-none focus:border-violet-500 text-center"
                       dir="ltr"
                     />
-                    <span className="text-white/40 text-xs">%</span>
+                    <span className="text-gray-400 text-xs">%</span>
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-2 pt-1">
                 <ContribBadge label="מעסיק" value={employerContrib} color="blue" />
-                <ContribBadge label="עובד" value={employeeContrib} color="amber" note="מנוכה מנטו" />
+                <ContribBadge label="עובד" value={employeeContrib} color="violet" note="מנוכה מנטו" />
                 <ContribBadge label="סה״כ/חודש" value={employerContrib + employeeContrib} color="green" />
               </div>
 
               {monthlyGross > 15712 && (
-                <div className="text-xs text-amber-400/70 flex items-start gap-1.5 mt-1">
+                <div className="text-xs text-orange-600 flex items-start gap-1.5 mt-1">
                   <span>⚠️</span>
                   <span>שכרך מעל תקרת ₪15,712 — הפרשת מעסיק על החלק שמעבר ממוסית</span>
                 </div>
@@ -103,7 +103,7 @@ export function StudyFundInput({ input, onChange }: Props) {
             <div className="space-y-2">
               <ContribBadge label="הפרשה חודשית (4.5%)" value={selfContrib} color="green" />
               <ContribBadge label="צבירה שנתית" value={selfContrib * 12} color="blue" />
-              <div className="text-xs text-green-400/70 mt-1">
+              <div className="text-xs text-green-600 mt-1">
                 ✓ מוכרת כהוצאה + פטורה ממס רווחי הון (25% חיסכון על הרווחים!)
               </div>
             </div>
@@ -112,7 +112,7 @@ export function StudyFundInput({ input, onChange }: Props) {
       )}
 
       {!hasIt && (
-        <div className="text-xs text-white/30 border border-white/5 rounded-xl p-3 bg-white/[0.02]">
+        <div className="text-xs text-gray-400 border border-gray-200 rounded-xl p-3 bg-gray-50">
           {isSelf
             ? '💡 עצמאי ללא קרן השתלמות מפסיד הטבת מס גדולה — שקול לפתוח!'
             : '💡 בקש מהמעסיק — רוב המעסיקים מציעים קרן השתלמות כחלק מהחבילה'}
@@ -123,12 +123,12 @@ export function StudyFundInput({ input, onChange }: Props) {
 }
 
 function ContribBadge({ label, value, color, note }: {
-  label: string; value: number; color: 'blue' | 'amber' | 'green'; note?: string
+  label: string; value: number; color: 'blue' | 'violet' | 'green'; note?: string
 }) {
   const colors = {
-    blue: 'border-blue-500/30 bg-blue-500/10 text-blue-300',
-    amber: 'border-amber-500/30 bg-amber-500/10 text-amber-300',
-    green: 'border-green-500/30 bg-green-500/10 text-green-300'
+    blue: 'border-blue-200 bg-blue-50 text-blue-700',
+    violet: 'border-violet-200 bg-violet-50 text-violet-700',
+    green: 'border-green-200 bg-green-50 text-green-700'
   }
   return (
     <div className={clsx('rounded-lg border p-2 text-center', colors[color])}>
