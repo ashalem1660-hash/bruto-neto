@@ -81,6 +81,7 @@ input[type="number"] { -moz-appearance: textfield; }
   /* Hide everything except print target */
   body > * { display: none !important; }
   #print-report { display: block !important; }
+  #print-compare { display: block !important; }
 
   #print-report {
     width: 100%;

@@ -10,6 +10,7 @@ import { DEFAULT_OFFER, DEFAULT_PROFILE, OFFER_COLORS } from '@/lib/compare-type
 import { OfferCard } from '@/components/compare/OfferCard'
 import { CompareTable } from '@/components/compare/CompareTable'
 import { PersonalProfileCard } from '@/components/compare/PersonalProfileCard'
+import { CompareExportButtons } from '@/components/compare/CompareExportButtons'
 
 const COLORS = ['violet', 'green', 'blue', 'orange'] as const
 const MAX_OFFERS = 4
@@ -191,6 +192,18 @@ export default function ComparePage() {
         {results.length > 0 && (
           <CompareTable offers={offers} results={results} />
         )}
+
+        {/* Export */}
+        {results.length > 0 && (
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+            <div className="text-xs text-gray-400 font-medium mb-1">הפקת דוח השוואה</div>
+            <p className="text-sm text-gray-600 mb-4">ייצא את השוואת ההצעות לקובץ מסודר ומעוצב</p>
+            <CompareExportButtons offers={offers} results={results} profile={profile} />
+          </div>
+        )}
+
+        {/* Hidden print target */}
+        <div id="print-compare" style={{ display: 'none' }} />
 
         {/* Disclaimer */}
         <div className="text-xs text-gray-400 text-center space-y-1 pb-8">

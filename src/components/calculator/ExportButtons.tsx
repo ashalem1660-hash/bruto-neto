@@ -98,82 +98,139 @@ export function ExportButtons({ result }: Props) {
     const el = document.getElementById('print-report')
     if (!el) { setPrinting(false); return }
 
-    const n2 = (v: number) => `₪${Math.round(v).toLocaleString('he-IL')}`
+    const m = (v: number) => `₪${Math.round(v).toLocaleString('he-IL')}`
+    const totalDeductions = result.grossMonthly - result.netMonthly
+    const netPercent = Math.round(result.netPercent)
+    const taxPercent = Math.round((result.deductions.incomeTax.rate ?? 0) * 100)
+
+    // Deduction rows for the breakdown section
+    const deductionItems = [
+      { label: 'מס הכנסה', value: result.deductions.incomeTax.monthly, color: '#DC2626' },
+      { label: 'ביטוח לאומי', value: result.deductions.bituachLeumi.monthly, color: '#EA580C' },
+      { label: 'ביטוח בריאות', value: result.deductions.bituachBriut.monthly, color: '#D97706' },
+      { label: 'פנסיה (עובד)', value: result.deductions.pension.monthly, color: '#7C3AED' },
+      ...(result.deductions.studyFundEmployee ? [{ label: 'קרן השתלמות', value: result.deductions.studyFundEmployee.monthly, color: '#2563EB' }] : []),
+    ]
+
+    const deductionRows = deductionItems.map(item => {
+      const pct = result.grossMonthly > 0 ? Math.round((item.value / result.grossMonthly) * 100) : 0
+      const barPct = totalDeductions > 0 ? Math.round((item.value / totalDeductions) * 100) : 0
+      return `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #F3F4F6">
+        <div style="flex:1;font-size:12px;color:#374151">${item.label}</div>
+        <div style="width:120px;background:#F3F4F6;border-radius:3px;height:6px;overflow:hidden">
+          <div style="height:100%;width:${barPct}%;background:${item.color};border-radius:3px"></div>
+        </div>
+        <div style="width:80px;text-align:left;font-size:12px;font-weight:700;color:${item.color}">${m(item.value)}/ח׳</div>
+        <div style="width:36px;text-align:left;font-size:11px;color:#9CA3AF">${pct}%</div>
+      </div>`
+    }).join('')
+
+    const taxBracketRows = result.taxBreakdown.map(b => {
+      const isActive = b.isActive
+      return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F9FAFB;opacity:${isActive ? 1 : 0.35}">
+        <span style="font-size:12px;color:#374151">${b.bracket}
+          <span style="font-size:10px;color:#9CA3AF;margin-right:4px">(${fmt(b.from / 12).toLocaleString('he-IL')}–${b.to !== null ? fmt(b.to / 12).toLocaleString('he-IL') : '∞'} לחודש)</span>
+        </span>
+        <span style="font-size:12px;font-weight:700;color:${isActive ? '#DC2626' : '#9CA3AF'}">${isActive ? `${m(b.tax / 12)}/ח׳` : '—'}</span>
+      </div>`
+    }).join('')
 
     el.innerHTML = `
-      <div class="print-title">ברוטו לנטו — דוח מס אישי</div>
-      <div class="print-subtitle">הופק בתאריך ${new Date().toLocaleDateString('he-IL')} | bruto-neto-gray.vercel.app</div>
+      <div style="direction:rtl;font-family:Heebo,Arial,sans-serif;max-width:800px;margin:0 auto;padding:20px;color:#111827">
 
-      <div class="print-grid-2">
-        <div class="print-card">
-          <div class="print-section-title">סיכום ראשי</div>
-          <div class="print-row"><span class="print-label">הכנסה ברוטו</span><span class="print-value">${n2(result.grossMonthly)}/ח׳</span></div>
-          <div class="print-row"><span class="print-label">נטו לחשבון הבנק</span><span class="print-value net">${n2(result.netMonthly)}/ח׳</span></div>
-          <div class="print-row"><span class="print-label">נטו שנתי</span><span class="print-value net">${n2(result.netAnnual)}</span></div>
-          <div class="print-row"><span class="print-label">אחוז נטו</span><span class="print-value accent">${Math.round(result.netPercent)}%</span></div>
-          <div class="print-row"><span class="print-label">מס אפקטיבי</span><span class="print-value">${Math.round((result.deductions.incomeTax.rate ?? 0) * 100)}%</span></div>
-        </div>
-
-        <div class="print-card" style="text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center">
-          <div style="font-size:12px;color:#888;margin-bottom:8px">נטו לחודש</div>
-          <div class="print-big-number">${n2(result.netMonthly)}</div>
-          <div style="font-size:12px;color:#888;margin-top:8px">${Math.round(result.netPercent)}% מהברוטו</div>
-        </div>
-      </div>
-
-      <div class="print-card">
-        <div class="print-section-title">פירוט ניכויים</div>
-        <div class="print-grid-2">
+        <!-- Cover header -->
+        <div style="background:linear-gradient(135deg,#7C3AED 0%,#4338CA 100%);border-radius:16px;padding:24px 28px;color:white;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center">
           <div>
-            <div class="print-row"><span class="print-label">מס הכנסה</span><span class="print-value deduction">${n2(result.deductions.incomeTax.monthly)}/ח׳</span></div>
-            <div class="print-row"><span class="print-label">ביטוח לאומי</span><span class="print-value deduction">${n2(result.deductions.bituachLeumi.monthly)}/ח׳</span></div>
-            <div class="print-row"><span class="print-label">ביטוח בריאות</span><span class="print-value deduction">${n2(result.deductions.bituachBriut.monthly)}/ח׳</span></div>
+            <div style="font-size:10px;font-weight:700;opacity:0.7;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">ברוטו לנטו • ${new Date().toLocaleDateString('he-IL')}</div>
+            <div style="font-size:26px;font-weight:900;margin-bottom:4px">דוח מס אישי</div>
+            <div style="font-size:13px;opacity:0.8">חישוב מפורט — מס, ניכויים, נטו</div>
           </div>
-          <div>
-            <div class="print-row"><span class="print-label">פנסיה (עובד)</span><span class="print-value deduction">${n2(result.deductions.pension.monthly)}/ח׳</span></div>
-            ${result.deductions.studyFundEmployee ? `<div class="print-row"><span class="print-label">קרן השתלמות</span><span class="print-value deduction">${n2(result.deductions.studyFundEmployee.monthly)}/ח׳</span></div>` : ''}
-            <div class="print-row"><span class="print-label">סה"כ ניכויים שנתי</span><span class="print-value deduction">${n2((result.grossMonthly - result.netMonthly) * 12)}</span></div>
+          <div style="text-align:center;background:rgba(255,255,255,0.15);border-radius:14px;padding:16px 22px">
+            <div style="font-size:11px;opacity:0.75;margin-bottom:4px">נטו לחודש</div>
+            <div style="font-size:32px;font-weight:900">${m(result.netMonthly)}</div>
+            <div style="font-size:12px;opacity:0.8;margin-top:4px">${netPercent}% מהברוטו</div>
           </div>
         </div>
+
+        <!-- Summary row -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+          ${[
+            { label: 'ברוטו חודשי', value: m(result.grossMonthly), color: '#374151', bg: '#F8FAFC' },
+            { label: 'נטו חודשי', value: m(result.netMonthly), color: '#16A34A', bg: '#F0FDF4' },
+            { label: 'נטו שנתי', value: m(result.netAnnual), color: '#16A34A', bg: '#F0FDF4' },
+            { label: 'מס אפקטיבי', value: `${taxPercent}%`, color: '#DC2626', bg: '#FEF2F2' },
+          ].map(item => `
+            <div style="background:${item.bg};border-radius:12px;padding:12px 14px;text-align:center">
+              <div style="font-size:10px;color:#6B7280;margin-bottom:4px">${item.label}</div>
+              <div style="font-size:16px;font-weight:900;color:${item.color}">${item.value}</div>
+            </div>`).join('')}
+        </div>
+
+        <!-- Where does your money go? -->
+        <div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:16px 18px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #7C3AED">לאן הולך הכסף? — ניתוח ניכויים חודשי</div>
+          ${deductionRows}
+          <div style="display:flex;justify-content:space-between;padding:10px 0 0;margin-top:4px;border-top:2px solid #E5E7EB">
+            <span style="font-size:13px;font-weight:800;color:#111827">נטו לחשבון הבנק</span>
+            <span style="font-size:15px;font-weight:900;color:#16A34A">${m(result.netMonthly)}/ח׳</span>
+          </div>
+        </div>
+
+        <!-- Tax brackets + credit points -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+          <div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:16px 18px">
+            <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #7C3AED">מדרגות מס הכנסה</div>
+            ${taxBracketRows}
+            ${result.creditAmount > 0 ? `
+              <div style="display:flex;justify-content:space-between;padding:6px 0;margin-top:4px;border-top:2px solid #DCFCE7">
+                <span style="font-size:12px;color:#166534;font-weight:700">זיכוי נקודות (${result.creditPoints.toFixed(2)} נק׳)</span>
+                <span style="font-size:12px;font-weight:900;color:#16A34A">−${m(result.creditAmount / 12)}/ח׳</span>
+              </div>` : ''}
+          </div>
+
+          ${result.creditBreakdown.length > 0 ? `
+          <div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:14px;padding:16px 18px">
+            <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #7C3AED">נקודות זיכוי — ${result.creditPoints.toFixed(2)} נק׳</div>
+            ${result.creditBreakdown.map(c => `
+              <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F3F4F6;font-size:12px">
+                <span style="color:#374151">${c.label}</span>
+                <span style="font-weight:700;color:#7C3AED">${c.points} נק׳ = ${m(c.points * 242)}/ח׳</span>
+              </div>`).join('')}
+            <div style="display:flex;justify-content:space-between;padding:8px 0 0;margin-top:4px;border-top:2px solid #EDE9FE;font-size:12px">
+              <span style="font-weight:800;color:#5B21B6">סה"כ</span>
+              <span style="font-weight:900;color:#7C3AED">${result.creditPoints.toFixed(2)} נק׳ = ${m(result.creditAmount / 12)}/ח׳</span>
+            </div>
+          </div>` : `<div></div>`}
+        </div>
+
+        ${result.employerCost ? `
+        <div style="background:#F8FAFC;border:1px solid #E5E7EB;border-radius:14px;padding:16px 18px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #7C3AED">עלות מעסיק חודשית</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            ${[
+              { label: 'שכר ברוטו', value: m(result.employerCost.grossSalary), color: '#374151' },
+              { label: 'פנסיה מעסיק (6.5%)', value: m(result.employerCost.pensionEmployer), color: '#7C3AED' },
+              { label: 'פיצויים (6%)', value: m(result.employerCost.severancePay), color: '#7C3AED' },
+              { label: 'ב"ל מעסיק', value: m(result.employerCost.bituachLeumiEmployer), color: '#EA580C' },
+              { label: 'עלות כוללת', value: m(result.employerCost.totalEmployerCost), color: '#111827' },
+            ].map(item => `
+              <div style="background:white;border-radius:10px;padding:10px 12px;border:1px solid #E5E7EB">
+                <div style="font-size:10px;color:#6B7280;margin-bottom:3px">${item.label}</div>
+                <div style="font-size:14px;font-weight:800;color:${item.color}">${item.value}</div>
+              </div>`).join('')}
+          </div>
+        </div>` : ''}
+
+        <div style="text-align:center;font-size:10px;color:#94A3B8;padding-top:12px;border-top:1px solid #F1F5F9">
+          ברוטו לנטו — מחשבון מיסוי ישראלי 2025 | החישובים לצרכי תכנון בלבד, אינם מהווים ייעוץ מס
+        </div>
       </div>
-
-      <div class="print-card">
-        <div class="print-section-title">מדרגות מס הכנסה</div>
-        ${result.taxBreakdown.map(b => `
-          <div class="print-row" style="${!b.isActive ? 'opacity:0.4' : ''}">
-            <span class="print-label">${b.bracket} (${fmt(b.from / 12).toLocaleString('he-IL')}–${b.to !== null ? fmt(b.to / 12).toLocaleString('he-IL') : '∞'} לחודש)</span>
-            <span class="print-value ${b.isActive ? '' : 'deduction'}">${b.isActive ? `${n2(b.tax / 12)}/ח׳` : '—'}</span>
-          </div>`).join('')}
-        ${result.creditAmount > 0 ? `<div class="print-row" style="color:#16a34a"><span class="print-label">זיכוי נקודות (${result.creditPoints.toFixed(2)} נק׳)</span><span class="print-value" style="color:#16a34a">−${n2(result.creditAmount / 12)}/ח׳</span></div>` : ''}
-      </div>
-
-      ${result.creditBreakdown.length > 0 ? `
-      <div class="print-card">
-        <div class="print-section-title">נקודות זיכוי — סה"כ ${result.creditPoints.toFixed(2)} נק׳ = ${n2(result.creditAmount / 12)}/ח׳</div>
-        ${result.creditBreakdown.map(c => `
-          <div class="print-row">
-            <span class="print-label">${c.label}</span>
-            <span class="print-value accent">${c.points} נק׳ = ${n2(c.points * 242)}/ח׳</span>
-          </div>`).join('')}
-      </div>` : ''}
-
-      ${result.employerCost ? `
-      <div class="print-card">
-        <div class="print-section-title">עלות מעסיק חודשית</div>
-        <div class="print-row"><span class="print-label">שכר ברוטו</span><span class="print-value">${n2(result.employerCost.grossSalary)}</span></div>
-        <div class="print-row"><span class="print-label">פנסיה מעסיק (6.5%)</span><span class="print-value">${n2(result.employerCost.pensionEmployer)}</span></div>
-        <div class="print-row"><span class="print-label">פיצויים (6%)</span><span class="print-value">${n2(result.employerCost.severancePay)}</span></div>
-        <div class="print-row"><span class="print-label">ביטוח לאומי מעסיק</span><span class="print-value">${n2(result.employerCost.bituachLeumiEmployer)}</span></div>
-        <div class="print-row" style="font-weight:bold"><span class="print-label">עלות כוללת</span><span class="print-value accent">${n2(result.employerCost.totalEmployerCost)}</span></div>
-      </div>` : ''}
-
-      <div class="print-footer">ברוטו לנטו — מחשבון מיסוי ישראלי 2025 | החישובים לצרכי תכנון בלבד, אינם מהווים ייעוץ מס</div>
     `
 
     setTimeout(() => {
       window.print()
       setPrinting(false)
-    }, 100)
+    }, 150)
   }
 
   return (
