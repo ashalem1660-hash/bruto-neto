@@ -16,7 +16,8 @@ import { AdditionalOptions } from '@/components/calculator/AdditionalOptions'
 import { ResultsPanel } from '@/components/calculator/ResultsPanel'
 import { Card } from '@/components/ui/Card'
 import { Tooltip } from '@/components/ui/Tooltip'
-import { Settings, Calculator, ChevronDown, ChevronUp } from 'lucide-react'
+import Link from 'next/link'
+import { Settings, Calculator, ChevronDown, ChevronUp, Scale } from 'lucide-react'
 
 export default function HomePage() {
   const { data, loading } = useTaxParams()
@@ -59,11 +60,20 @@ export default function HomePage() {
               <p className="text-xs text-gray-400">גלה לאן הכסף שלך הולך</p>
             </div>
           </div>
-          <a href="/admin"
-            className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all">
-            <Settings className="w-4 h-4" />
-            <span className="hidden sm:inline">אדמין</span>
-          </a>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/compare"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-violet-600 bg-violet-50 hover:bg-violet-100 border border-violet-200 transition-all"
+            >
+              <Scale className="w-4 h-4" />
+              <span className="hidden sm:inline">השוואת הצעות</span>
+            </Link>
+            <a href="/admin"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all">
+              <Settings className="w-4 h-4" />
+              <span className="hidden sm:inline">אדמין</span>
+            </a>
+          </div>
         </div>
       </header>
 

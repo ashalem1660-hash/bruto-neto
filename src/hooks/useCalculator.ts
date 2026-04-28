@@ -16,7 +16,6 @@ const DEFAULT_INPUT: CalculatorInput = {
   children: [],
   disability: { hasDisability: false, percentage: 0, isBlind: false },
   settlement: { isRecognized: false, category: null, name: '' },
-  // פנסיה + השתלמות
   pensionRate: 6,
   hasStudyFund: false,
   studyFundEmployerRate: 7.5,
@@ -25,7 +24,6 @@ const DEFAULT_INPUT: CalculatorInput = {
   retirementAge: 67,
   pensionReturnRate: 4,
   studyFund: 0,
-  // שכיר כללי
   hasTravelAllowance: false,
   travelAllowance: 0,
   isSingleParent: false,
@@ -36,7 +34,6 @@ const DEFAULT_INPUT: CalculatorInput = {
   bachelorGraduationYear: 2024,
   hasMasters: false,
   masterGraduationYear: 2022,
-  // עצמאי
   annualRevenue: 300000,
   annualExpenses: 60000,
   isVatExempt: false,
@@ -47,42 +44,49 @@ const DEFAULT_INPUT: CalculatorInput = {
   disabilityInsuranceCost: 0
 }
 
+const LS_KEY = 'bruto-neto-input-v1'
+
+function loadFromStorage(): CalculatorInput {
+  try {
+    const raw = localStorage.getItem(LS_KEY)
+    if (!raw) return DEFAULT_INPUT
+    return { ...DEFAULT_INPUT, ...JSON.parse(raw) }
+  } catch {
+    return DEFAULT_INPUT
+  }
+}
+
+function saveToStorage(input: CalculatorInput) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(input))
+  } catch {}
+}
+
 export function useCalculator(params: TaxParameters) {
   const [input, setInput] = useState<CalculatorInput>(DEFAULT_INPUT)
   const [result, setResult] = useState<CalculatorResult | null>(null)
-  const [compareInput, setCompareInput] = useState<CalculatorInput | null>(null)
-  const [compareResult, setCompareResult] = useState<CalculatorResult | null>(null)
+  const [hydrated, setHydrated] = useState(false)
+
+  // Load from localStorage after hydration
+  useEffect(() => {
+    setInput(loadFromStorage())
+    setHydrated(true)
+  }, [])
 
   const debouncedInput = useDebounce(input, 300)
-  const debouncedCompare = useDebounce(compareInput, 300)
 
   useEffect(() => {
+    if (!hydrated) return
     try {
       const r = calculate(debouncedInput, params)
       setResult(r)
-    } catch {
-      // ignore
-    }
-  }, [debouncedInput, params])
-
-  useEffect(() => {
-    if (!debouncedCompare) { setCompareResult(null); return }
-    try {
-      setCompareResult(calculate(debouncedCompare, params))
-    } catch {
-      setCompareResult(null)
-    }
-  }, [debouncedCompare, params])
+      saveToStorage(debouncedInput)
+    } catch {}
+  }, [debouncedInput, params, hydrated])
 
   const updateInput = useCallback((updates: Partial<CalculatorInput>) => {
     setInput(prev => ({ ...prev, ...updates }))
   }, [])
 
-  const enableCompare = useCallback(() => setCompareInput({ ...input }), [input])
-  const disableCompare = useCallback(() => { setCompareInput(null); setCompareResult(null) }, [])
-  const updateCompare = useCallback((updates: Partial<CalculatorInput>) => {
-    setCompareInput(prev => prev ? { ...prev, ...updates } : null)
-  }, [])
-
-  return { input, result, compareInput, compareResult, updateInput, enableCompare, disableCompare, updateCompare }
+  return { input, result, updateInput }
 }
